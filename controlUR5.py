@@ -12,11 +12,9 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 s.connect((HOST, PORT))
 
-
 def debug():
     s.send ("set_digital_out(2,True)".encode() + "\n".encode())
     time.sleep(0.05)
-
 
 # pose = [x,y,z,rx,ry,rz]
 # acceleration and velocity have default values
