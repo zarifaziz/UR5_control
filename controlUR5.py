@@ -4,9 +4,10 @@
 import socket
 import time
 import math
+import base64
 #HOST = "169.254.52.193"    # The remote host
 # HOST = "192.168.0.1"
-HOST = "192.168.0.10"
+HOST = "172.22.22.2"
 PORT = 30002              # The same port as used by the server
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -24,7 +25,7 @@ def movel(s, p, a=0.1,v=0.5,t=0,r=0):
         script = "movel(p[{},{},{},{},{},{}], a={}, v={}, t={}, r={})"
         script = script.format(p[0],p[1],p[2],p[3],p[4],p[5],a,v,t,r)
         s.send(bytes(script, 'utf-8')+bytes("\n", 'utf-8'))
-        msg,ancdata,msg_flags,address = s.recvmsg(1024)
+        msg =  s.recv(1024)
     except socket.error as socketerror:
         print("..... Some kind of error :(...")
     return msg
@@ -49,7 +50,7 @@ def movej(s,angles,a=0.1,v=0.5,t=0,r=0):
     return msg
 
 # moving to stable joint angles
-movej(s,[80.43,-40.59,61.4,-110.8,-89.77,80.45])
+#movej(s,[80.43,-40.59,61.4,-110.8,-89.77,80.45])
 
 
 def initialise(s, a=0.5,v=0.5,t=0,r=0):
@@ -101,8 +102,10 @@ def decode_position(s, msg):
 
     print(current_position)
 
-# msg = movel(s,[0,-0.8,0.2,2.221,2.221,0])
-# decode_position(s, msg)
-# print(msg)
+msg = movel(s,[0,-1,0.2,2.221,2.221,0])
+#decode_position(s, msg)
+print(msg.decode('ISO-8859-1'))
+
+# print(base64.b64decode(msg))
 
 s.close()
